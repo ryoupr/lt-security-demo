@@ -1,0 +1,22 @@
+name: Ruff Security Scan
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  ruff:
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/ruff-action@v3
+        with:
+          args: "check --select S --output-format sarif"
+        continue-on-error: true
+      - run: ruff check --select S --output-format sarif . > ruff.sarif
+        continue-on-error: true
+      - uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: ruff.sarif
