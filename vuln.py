@@ -16,3 +16,11 @@ def get_user(user_id):
     conn = sqlite3.connect("app.db")
     query = f"SELECT * FROM users WHERE id = '{user_id}'"
     return conn.execute(query).fetchall()
+
+
+if __name__ == "__main__":
+    import sys
+    if sys.argv[1] == "ping":
+        ping_host(sys.argv[2])
+    elif sys.argv[1] == "user":
+        print(get_user(sys.argv[2]))
