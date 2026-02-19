@@ -11,12 +11,12 @@ jobs:
       security-events: write
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/ruff-action@v3
-        with:
-          args: "check --select S --output-format sarif"
-        continue-on-error: true
-      - run: ruff check --select S --output-format sarif . > ruff.sarif
-        continue-on-error: true
+      - name: Run Ruff security check
+        run: |
+          pip install ruff
+          ruff check --select S --output-format sarif . > ruff.sarif || true
+          ruff check --select S .
       - uses: github/codeql-action/upload-sarif@v4
+        if: always()
         with:
           sarif_file: ruff.sarif
